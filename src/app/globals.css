@@ -1,26 +1,184 @@
 @import "tailwindcss";
 
+/*
+ * Premium Design Tokens & Responsive Utilities
+ * --------------------------------------------
+ */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Light theme — warm, editorial */
+  --canvas: #faf8f5;
+  --surface: #ffffff;
+  --surface-hover: #f5f1ea;
+  --raised: #f4f0e9;
+
+  --ink: #1c1917;
+  --muted: #57534e;
+  --faint: #78716c;
+
+  --line: #e8e1d6;
+  --line-strong: #cbbfac;
+
+  --brand: #b45309;
+  --brand-hover: #92400e;
+  --brand-subtle: rgba(180, 83, 9, 0.1);
+  --brand-ink: #ffffff;
+
+  --success: #15803d;
+  --danger: #dc2626;
+
+  color-scheme: light;
+}
+
+.dark {
+  /* Deep premium — warm charcoal + amber */
+  --canvas: #0b0a0c;
+  --surface: #16141a;
+  --surface-hover: #201d24;
+  --raised: #1d1a21;
+
+  --ink: #f6f3ef;
+  --muted: #a8a29e;
+  --faint: #78716c;
+
+  --line: #2a2630;
+  --line-strong: #423c48;
+
+  --brand: #e8a44c;
+  --brand-hover: #f2b667;
+  --brand-subtle: rgba(232, 164, 76, 0.14);
+  --brand-ink: #1a1206;
+
+  --success: #22c55e;
+  --danger: #ef4444;
+
+  color-scheme: dark;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-geist-sans), system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, Monaco,
+    Consolas, monospace;
+
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-surface-hover: var(--surface-hover);
+  --color-raised: var(--raised);
+
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+
+  --color-brand: var(--brand);
+  --color-brand-hover: var(--brand-hover);
+  --color-brand-subtle: var(--brand-subtle);
+  --color-brand-ink: var(--brand-ink);
+
+  --color-success: var(--success);
+  --color-danger: var(--danger);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--canvas);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Balance multi-line headings for a more editorial rag */
+.text-balance {
+  text-wrap: balance;
+}
+
+::selection {
+  background-color: color-mix(in srgb, var(--brand) 30%, transparent);
+  color: var(--ink);
+}
+
+/* Scrollbar refinement */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--canvas);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--line-strong);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--faint);
+}
+
+/* Keyboard Focus Ring */
+.focus-ring {
+  outline: none;
+}
+.focus-ring:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+  border-radius: 0.375rem;
+}
+
+/* Masked word reveal for headings (CSS-driven so text is always revealed,
+   even when JS/animation is unavailable — reduced-motion snaps it visible). */
+@keyframes wordUp {
+  from {
+    transform: translateY(115%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+.word-reveal {
+  animation: wordUp 0.75s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Theme-toggle circular reveal (View Transitions API) */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+::view-transition-old(root) {
+  z-index: 0;
+}
+::view-transition-new(root) {
+  z-index: 1;
+  animation: vtReveal 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes vtReveal {
+  from {
+    clip-path: circle(0% at var(--vt-x, 50%) var(--vt-y, 50%));
+  }
+  to {
+    clip-path: circle(150% at var(--vt-x, 50%) var(--vt-y, 50%));
+  }
+}
+
+/* Respect reduced-motion across every animation */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
 }
