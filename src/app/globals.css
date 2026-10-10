@@ -137,13 +137,18 @@ body {
 @keyframes wordUp {
   from {
     transform: translateY(115%);
+    opacity: 0;
+  }
+  60% {
+    opacity: 1;
   }
   to {
     transform: translateY(0);
+    opacity: 1;
   }
 }
 .word-reveal {
-  animation: wordUp 0.75s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: wordUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 /* Theme-toggle circular reveal (View Transitions API) */

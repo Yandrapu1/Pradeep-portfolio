@@ -18,10 +18,12 @@ export function Reveal({ children, className = "", delay = 0, as = "div" }: Reve
   const MotionTag = motion[as];
   return (
     <MotionTag
-      initial={{ opacity: 0, y: 16 }}
+      initial={{ opacity: 0, y: 12 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-80px" }}
-      transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1], delay }}
+      // Pre-trigger ~120px before the element enters from the bottom so content
+      // is already settling as it scrolls into view — no blank gaps on fast scroll.
+      viewport={{ once: true, margin: "0px 0px 120px 0px" }}
+      transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1], delay }}
       className={className}
     >
       {children}

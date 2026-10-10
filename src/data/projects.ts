@@ -62,7 +62,7 @@ export const PROJECTS: Project[] = [
     caseStudy: {
       role: "Full Stack Developer (End-to-End Development & Deployment)",
       overview:
-        "Bagel Master UK is a production-grade food ordering and e-commerce platform designed for direct-to-consumer bagel orders across the UK. It handles both collection and delivery orders with strict time-slot scheduling, dynamic delivery fee calculations based on customer distance, and a comprehensive admin backend for order fulfillment and refunds.",
+        "Bagel Master UK is a live, production food-ordering and e-commerce platform for direct-to-consumer bagel orders across the UK, which I built and shipped end to end as the sole developer. It handles both collection and delivery orders with strict time-slot scheduling, dynamic delivery fees calculated from real customer distance, and a full admin backend for order fulfillment and refunds — all running on a VPS I deployed and maintain.",
       problem:
         "Local food businesses often struggle with generic e-commerce tools that lack distance-restricted delivery zones, order slot throttling, and real-time kitchen order management. Standard platforms either charge high commission fees or fail to enforce delivery radius logic accurately.",
       solution:
@@ -129,7 +129,7 @@ export const PROJECTS: Project[] = [
     caseStudy: {
       role: "Full Stack Developer (Database Design, REST APIs & Admin Portal)",
       overview:
-        "Vasavi Ayurveda is an e-commerce and healthcare portal that sells authentic Ayurvedic formulations while providing a dedicated portal for practitioner doctor registration and patient consultations. It features a relational MySQL database backbone, customer account management, multi-category product cataloging, and an intuitive admin control center.",
+        "Vasavi Ayurveda is a live e-commerce and healthcare portal that sells authentic Ayurvedic formulations while providing a dedicated portal for practitioner doctor registration and patient consultations. I own its data layer, REST APIs, and admin portal in production — a relational MySQL backbone, customer account management, multi-category product cataloging, and an admin control center that lets the client run the store without a developer in the loop.",
       problem:
         "Combining retail e-commerce with specialized practitioner registration requires strict separation of customer versus doctor workflows, dynamic product categorization, and structured relational data management.",
       solution:
@@ -196,7 +196,7 @@ export const PROJECTS: Project[] = [
     caseStudy: {
       role: "Full Stack Developer",
       overview:
-        "Vasavi Astrology is a modern Next.js web application providing astrological insights, horoscope consultation scheduling, and digital services. It leverages Next.js App Router for server-rendered page speed, Prisma ORM for type-safe database queries, and MySQL for reliable data persistence.",
+        "Vasavi Astrology is a live Next.js application providing astrological insights, consultation scheduling, and digital services, built on a modern type-safe stack. It leverages the Next.js App Router for server-rendered page speed and SEO, Prisma ORM for end-to-end type-safe database access, and MySQL for reliable persistence — with a custom admin panel so the client manages content and bookings directly.",
       problem:
         "Traditional astrology portals suffer from slow page load times, poor mobile UX, and difficult content management for non-technical site administrators.",
       solution:
@@ -226,6 +226,15 @@ export const PROJECTS: Project[] = [
           howSolved:
             "Instantiated a global Prisma Client singleton pattern to prevent connection exhaustion during development and hot-reloading.",
         },
+        {
+          title: "Serving Fresh Booking Data Through the App Router Cache",
+          why: "The App Router caches rendered routes and data by default for speed — but consultation availability, client requests, and admin-edited content must always reflect the latest database state.",
+          how: "Separated static editorial pages from dynamic, data-driven ones and controlled caching explicitly per route.",
+          whatWasHard:
+            "Early on, newly booked slots and admin content changes kept showing stale values because pages were being served from the cache instead of the database.",
+          howSolved:
+            "Marked booking and admin routes as dynamically rendered and revalidated the relevant cached paths immediately after each mutation, so users always see current availability while marketing pages stay fast and cached.",
+        },
       ],
       liveUrl: "https://vasaviastrology.com",
     },
@@ -252,7 +261,7 @@ export const PROJECTS: Project[] = [
     caseStudy: {
       role: "Full Stack Developer",
       overview:
-        "The Matrimony Application is a dedicated matchmaking web platform that enables users to create comprehensive profiles, search for potential matches based on specific preferences, and interact securely. It features multi-step registration forms, image uploads, preference filtering, and protected user routes.",
+        "The Matrimony Application is a full-stack matchmaking platform that lets users build comprehensive profiles, search for matches on specific preferences, and interact securely. I engineered the multi-step registration flow with partial-save resilience, image uploads, a preference-based search engine, and JWT-protected user routes — the kind of data-heavy onboarding that quietly breaks if form state and profile status aren't handled carefully.",
       problem:
         "Matrimony applications require gathering extensive user data (family details, education, career, lifestyle) across multi-step registration flows without frustrating users or losing form state.",
       solution:
@@ -281,6 +290,15 @@ export const PROJECTS: Project[] = [
             "Preventing incomplete user profiles from cluttering active search directory results.",
           howSolved:
             "Added an explicit `profile_status` state (`DRAFT` vs `ACTIVE` vs `VERIFIED`). Search queries strictly filter for `ACTIVE` and `VERIFIED` profile records.",
+        },
+        {
+          title: "Fast, Safe Multi-Criteria Match Search",
+          why: "Matchmaking lives or dies on search — users filter profiles by age, education, location, and community simultaneously, so results must come back quickly without exposing the database to injection.",
+          how: "Built the search endpoint around dynamically composed, parameterized SQL that only appends the filters a user actually selected.",
+          whatWasHard:
+            "Naively combining many optional filters produced slow full-table scans as the profile count grew, and string-built queries risked SQL injection.",
+          howSolved:
+            "Added indexes on the most-filtered columns and assembled queries from parameterized fragments bound to user input — keeping lookups index-backed and fully sanitized regardless of how many filters are applied.",
         },
       ],
       liveUrl: "https://vadiyarajulu.com",
